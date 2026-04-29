@@ -1,6 +1,8 @@
 package postgres
 
 import (
+	"errors"
+
 	"github.com/heru-oktafian/cms-be/internal/domain/entity"
 	"gorm.io/gorm"
 )
@@ -16,7 +18,7 @@ func NewProfileRepository(db *gorm.DB) *ProfileRepository {
 func (r *ProfileRepository) Get() (*entity.Profile, error) {
 	var profile entity.Profile
 	if err := r.db.First(&profile).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 		return nil, err
@@ -31,6 +33,7 @@ func (r *ProfileRepository) Upsert(profile *entity.Profile) (*entity.Profile, er
 	}
 	if current != nil {
 		profile.ID = current.ID
+		profile.CreatedAt = current.CreatedAt
 	}
 	if err := r.db.Save(profile).Error; err != nil {
 		return nil, err
