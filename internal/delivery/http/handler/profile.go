@@ -8,6 +8,7 @@ import (
 	appctx "github.com/heru-oktafian/cms-be/internal/app"
 	"github.com/heru-oktafian/cms-be/internal/domain/entity"
 	profileRepo "github.com/heru-oktafian/cms-be/internal/repository/postgres"
+	authUsecase "github.com/heru-oktafian/cms-be/internal/usecase/auth"
 	profileUsecase "github.com/heru-oktafian/cms-be/internal/usecase/profile"
 	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
 	"github.com/heru-oktafian/cms-be/pkg/response"
@@ -15,6 +16,7 @@ import (
 
 type Handler struct {
 	app            *appctx.App
+	authUsecase    *authUsecase.Usecase
 	profileUsecase *profileUsecase.Usecase
 	projectUsecase *projectUsecase.Usecase
 }
@@ -33,8 +35,10 @@ type upsertProfileRequest struct {
 
 func NewHandler(app *appctx.App) *Handler {
 	profileRepository := profileRepo.NewProfileRepository(app.DB)
+	adminUserRepository := profileRepo.NewAdminUserRepository(app.DB)
 	return &Handler{
 		app:            app,
+		authUsecase:    authUsecase.NewUsecase(adminUserRepository, app.Config),
 		profileUsecase: profileUsecase.NewUsecase(profileRepository),
 	}
 }

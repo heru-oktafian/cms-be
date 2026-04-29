@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/heru-oktafian/cms-be/internal/app"
 	"github.com/heru-oktafian/cms-be/internal/delivery/http/handler"
+	"github.com/heru-oktafian/cms-be/internal/delivery/http/middleware"
 )
 
 func NewApp(container *app.App) *fiber.App {
@@ -26,8 +27,10 @@ func NewApp(container *app.App) *fiber.App {
 	public.Get("/experiences", h.Placeholder("public experiences endpoint"))
 	public.Get("/social-links", h.Placeholder("public social links endpoint"))
 
-	admin := api.Group("/admin")
-	admin.Post("/auth/login", h.Placeholder("admin login endpoint"))
+	adminAuth := api.Group("/admin/auth")
+	adminAuth.Post("/login", h.LoginAdmin)
+
+	admin := api.Group("/admin", middleware.AdminJWT(container.Config.JWTSecret))
 	admin.Get("/profile", h.GetAdminProfile)
 	admin.Put("/profile", h.UpsertAdminProfile)
 	admin.Get("/projects", h.ListAdminProjects)

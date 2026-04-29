@@ -21,26 +21,32 @@ type Config struct {
 	DBName     string
 	DBSSLMode  string
 
-	JWTSecret string
-	UploadDir string
+	JWTSecret         string
+	UploadDir         string
+	AdminSeedName     string
+	AdminSeedEmail    string
+	AdminSeedPassword string
 }
 
 func Load() Config {
 	_ = godotenv.Load()
 	cfg := Config{
-		AppName:    getEnv("APP_NAME", "cms-be"),
-		AppEnv:     getEnv("APP_ENV", "development"),
-		AppPort:    getEnv("APP_PORT", "8080"),
-		AppHost:    getEnv("APP_HOST", "0.0.0.0"),
-		AppBaseURL: getEnv("APP_BASE_URL", "http://localhost:8080"),
-		DBHost:     getEnv("DB_HOST", "127.0.0.1"),
-		DBPort:     getEnv("DB_PORT", "5432"),
-		DBUser:     getEnv("DB_USER", "postgres"),
-		DBPassword: getEnv("DB_PASSWORD", ""),
-		DBName:     getEnv("DB_NAME", "cms_be"),
-		DBSSLMode:  getEnv("DB_SSLMODE", "disable"),
-		JWTSecret:  getEnv("JWT_SECRET", "change-me"),
-		UploadDir:  getEnv("UPLOAD_DIR", "storage/uploads"),
+		AppName:           getEnv("APP_NAME", "cms-be"),
+		AppEnv:            getEnv("APP_ENV", "development"),
+		AppPort:           getEnv("APP_PORT", "8080"),
+		AppHost:           getEnv("APP_HOST", "0.0.0.0"),
+		AppBaseURL:        getEnv("APP_BASE_URL", "http://localhost:8080"),
+		DBHost:            getEnv("DB_HOST", "127.0.0.1"),
+		DBPort:            getEnv("DB_PORT", "5432"),
+		DBUser:            getEnv("DB_USER", "postgres"),
+		DBPassword:        getEnv("DB_PASSWORD", ""),
+		DBName:            getEnv("DB_NAME", "cms_be"),
+		DBSSLMode:         getEnv("DB_SSLMODE", "disable"),
+		JWTSecret:         getEnv("JWT_SECRET", "change-me"),
+		UploadDir:         getEnv("UPLOAD_DIR", "storage/uploads"),
+		AdminSeedName:     getEnv("ADMIN_SEED_NAME", "Admin"),
+		AdminSeedEmail:    getEnv("ADMIN_SEED_EMAIL", ""),
+		AdminSeedPassword: getEnv("ADMIN_SEED_PASSWORD", ""),
 	}
 	if cfg.JWTSecret == "change-me" {
 		log.Println("warning: JWT_SECRET still uses default value")
