@@ -9,12 +9,14 @@ import (
 	"github.com/heru-oktafian/cms-be/internal/domain/entity"
 	profileRepo "github.com/heru-oktafian/cms-be/internal/repository/postgres"
 	profileUsecase "github.com/heru-oktafian/cms-be/internal/usecase/profile"
+	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
 	"github.com/heru-oktafian/cms-be/pkg/response"
 )
 
 type Handler struct {
 	app            *appctx.App
 	profileUsecase *profileUsecase.Usecase
+	projectUsecase *projectUsecase.Usecase
 }
 
 type upsertProfileRequest struct {
