@@ -13,6 +13,7 @@ import (
 	profileUsecase "github.com/heru-oktafian/cms-be/internal/usecase/profile"
 	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
 	skillUsecase "github.com/heru-oktafian/cms-be/internal/usecase/skill"
+	socialLinkUsecase "github.com/heru-oktafian/cms-be/internal/usecase/social_link"
 	"github.com/heru-oktafian/cms-be/pkg/response"
 )
 
@@ -23,6 +24,7 @@ type Handler struct {
 	projectUsecase    *projectUsecase.Usecase
 	skillUsecase      *skillUsecase.Usecase
 	experienceUsecase *experienceUsecase.Usecase
+	socialLinkUsecase *socialLinkUsecase.Usecase
 }
 
 type upsertProfileRequest struct {
