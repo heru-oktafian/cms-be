@@ -9,16 +9,20 @@ import (
 	"github.com/heru-oktafian/cms-be/internal/domain/entity"
 	profileRepo "github.com/heru-oktafian/cms-be/internal/repository/postgres"
 	authUsecase "github.com/heru-oktafian/cms-be/internal/usecase/auth"
+	experienceUsecase "github.com/heru-oktafian/cms-be/internal/usecase/experience"
 	profileUsecase "github.com/heru-oktafian/cms-be/internal/usecase/profile"
 	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
+	skillUsecase "github.com/heru-oktafian/cms-be/internal/usecase/skill"
 	"github.com/heru-oktafian/cms-be/pkg/response"
 )
 
 type Handler struct {
-	app            *appctx.App
-	authUsecase    *authUsecase.Usecase
-	profileUsecase *profileUsecase.Usecase
-	projectUsecase *projectUsecase.Usecase
+	app               *appctx.App
+	authUsecase       *authUsecase.Usecase
+	profileUsecase    *profileUsecase.Usecase
+	projectUsecase    *projectUsecase.Usecase
+	skillUsecase      *skillUsecase.Usecase
+	experienceUsecase *experienceUsecase.Usecase
 }
 
 type upsertProfileRequest struct {

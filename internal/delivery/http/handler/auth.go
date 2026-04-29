@@ -26,3 +26,7 @@ func (h *Handler) LoginAdmin(c *fiber.Ctx) error {
 
 	return response.JSON(c, http.StatusOK, "login success", result)
 }
+
+func (h *Handler) LogoutAdmin(c *fiber.Ctx) error {
+	return response.JSON(c, http.StatusOK, "logout success", nil)
+}
