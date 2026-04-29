@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"fmt"
+	"log"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
+	jwtAuth "github.com/heru-oktafian/cms-be/internal/infrastructure/auth"
 )
 
 func AdminJWT(secret string) fiber.Handler {
@@ -26,28 +26,21 @@ func AdminJWT(secret string) fiber.Handler {
 			})
 		}
 
-		token, err := jwt.Parse(parts[1], func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("unexpected signing method")
-			}
-			return []byte(secret), nil
-		})
-		if err != nil || !token.Valid {
+		claims, err := jwtAuth.ParseAdminJWT(parts[1], secret)
+		if err != nil {
+			log.Printf("[jwt-debug] parse error: %v", err)
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"message": "invalid token",
 				"data":    nil,
 			})
 		}
 
-		claims, ok := token.Claims.(jwt.MapClaims)
-		if !ok {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"message": "invalid token claims",
-				"data":    nil,
-			})
-		}
-
-		c.Locals("auth_user", claims)
+		c.Locals("auth_user", fiber.Map{
+			"sub":   claims.Subject,
+			"email": claims.Email,
+			"role":  claims.Role,
+			"exp":   claims.ExpiresAt.Unix(),
+		})
 		return c.Next()
 	}
 }

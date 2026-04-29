@@ -30,6 +30,7 @@ func NewApp(container *app.App) *fiber.App {
 	adminAuth := api.Group("/admin/auth")
 	adminAuth.Post("/login", h.LoginAdmin)
 	adminAuth.Post("/logout", h.LogoutAdmin)
+	adminAuth.Get("/me", middleware.AdminJWT(container.Config.JWTSecret), h.GetAuthMe)
 
 	admin := api.Group("/admin", middleware.AdminJWT(container.Config.JWTSecret))
 	admin.Get("/profile", h.GetAdminProfile)
