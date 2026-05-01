@@ -14,6 +14,7 @@ import (
 	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
 	skillUsecase "github.com/heru-oktafian/cms-be/internal/usecase/skill"
 	socialLinkUsecase "github.com/heru-oktafian/cms-be/internal/usecase/social_link"
+	toolUsecase "github.com/heru-oktafian/cms-be/internal/usecase/tool"
 	"github.com/heru-oktafian/cms-be/pkg/response"
 )
 
@@ -25,27 +26,31 @@ type Handler struct {
 	skillUsecase      *skillUsecase.Usecase
 	experienceUsecase *experienceUsecase.Usecase
 	socialLinkUsecase *socialLinkUsecase.Usecase
+	toolUsecase       *toolUsecase.UseCase
 }
 
 type upsertProfileRequest struct {
-	FullName    string `json:"full_name"`
-	Headline    string `json:"headline"`
-	SubHeadline string `json:"sub_headline"`
-	Bio         string `json:"bio"`
-	Email       string `json:"email"`
-	Phone       string `json:"phone"`
-	Location    string `json:"location"`
-	AvatarPath  string `json:"avatar_path"`
-	ResumePath  string `json:"resume_path"`
+	FullName         string `json:"full_name"`
+	Headline         string `json:"headline"`
+	SubHeadline      string `json:"sub_headline"`
+	HeroDescription  string `json:"hero_description"`
+	AboutDescription string `json:"about_description"`
+	Email            string `json:"email"`
+	Phone            string `json:"phone"`
+	Location         string `json:"location"`
+	AvatarPath       string `json:"avatar_path"`
+	ResumePath       string `json:"resume_path"`
 }
 
 func NewHandler(app *appctx.App) *Handler {
 	profileRepository := profileRepo.NewProfileRepository(app.DB)
 	adminUserRepository := profileRepo.NewAdminUserRepository(app.DB)
+	toolRepository := profileRepo.NewToolRepository(app.DB)
 	return &Handler{
 		app:            app,
 		authUsecase:    authUsecase.NewUsecase(adminUserRepository, app.Config),
 		profileUsecase: profileUsecase.NewUsecase(profileRepository),
+		toolUsecase:    toolUsecase.NewUseCase(toolRepository),
 	}
 }
 
@@ -73,7 +78,8 @@ func (h *Handler) UpsertAdminProfile(c *fiber.Ctx) error {
 	payload.FullName = strings.TrimSpace(payload.FullName)
 	payload.Headline = strings.TrimSpace(payload.Headline)
 	payload.SubHeadline = strings.TrimSpace(payload.SubHeadline)
-	payload.Bio = strings.TrimSpace(payload.Bio)
+	payload.HeroDescription = strings.TrimSpace(payload.HeroDescription)
+	payload.AboutDescription = strings.TrimSpace(payload.AboutDescription)
 	payload.Email = strings.TrimSpace(payload.Email)
 	payload.Phone = strings.TrimSpace(payload.Phone)
 	payload.Location = strings.TrimSpace(payload.Location)
@@ -85,15 +91,16 @@ func (h *Handler) UpsertAdminProfile(c *fiber.Ctx) error {
 	}
 
 	profile := &entity.Profile{
-		FullName:    payload.FullName,
-		Headline:    payload.Headline,
-		SubHeadline: payload.SubHeadline,
-		Bio:         payload.Bio,
-		Email:       payload.Email,
-		Phone:       payload.Phone,
-		Location:    payload.Location,
-		AvatarPath:  payload.AvatarPath,
-		ResumePath:  payload.ResumePath,
+		FullName:         payload.FullName,
+		Headline:         payload.Headline,
+		SubHeadline:      payload.SubHeadline,
+		HeroDescription:  payload.HeroDescription,
+		AboutDescription: payload.AboutDescription,
+		Email:            payload.Email,
+		Phone:            payload.Phone,
+		Location:         payload.Location,
+		AvatarPath:       payload.AvatarPath,
+		ResumePath:       payload.ResumePath,
 	}
 
 	savedProfile, err := h.profileUsecase.Upsert(profile)
