@@ -15,6 +15,14 @@ func NewProjectRepository(db *gorm.DB) *ProjectRepository {
 	return &ProjectRepository{db: db}
 }
 
+func (r *ProjectRepository) ListActive() ([]entity.Project, error) {
+	var projects []entity.Project
+	if err := r.db.Where("is_active = ?", true).Order("sort_order ASC, id DESC").Find(&projects).Error; err != nil {
+		return nil, err
+	}
+	return projects, nil
+}
+
 func (r *ProjectRepository) List() ([]entity.Project, error) {
 	var projects []entity.Project
 	if err := r.db.Order("sort_order ASC, id DESC").Find(&projects).Error; err != nil {

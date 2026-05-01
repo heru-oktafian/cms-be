@@ -13,6 +13,10 @@ func NewUsecase(repo repository.ProjectRepository) *Usecase {
 	return &Usecase{repo: repo}
 }
 
+func (u *Usecase) ListActive() ([]entity.Project, error) {
+	return u.repo.ListActive()
+}
+
 func (u *Usecase) List() ([]entity.Project, error) {
 	return u.repo.List()
 }

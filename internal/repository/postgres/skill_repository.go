@@ -15,9 +15,17 @@ func NewSkillRepository(db *gorm.DB) *SkillRepository {
 	return &SkillRepository{db: db}
 }
 
+func (r *SkillRepository) ListActive() ([]entity.Skill, error) {
+	var skills []entity.Skill
+	if err := r.db.Where("is_active = ?", true).Order("category ASC, sort_order ASC, id DESC").Find(&skills).Error; err != nil {
+		return nil, err
+	}
+	return skills, nil
+}
+
 func (r *SkillRepository) List() ([]entity.Skill, error) {
 	var skills []entity.Skill
-	if err := r.db.Order("sort_order ASC, id DESC").Find(&skills).Error; err != nil {
+	if err := r.db.Order("category ASC, sort_order ASC, id DESC").Find(&skills).Error; err != nil {
 		return nil, err
 	}
 	return skills, nil

@@ -13,6 +13,10 @@ func NewUsecase(repo repository.SocialLinkRepository) *Usecase {
 	return &Usecase{repo: repo}
 }
 
+func (u *Usecase) ListActive() ([]entity.SocialLink, error) {
+	return u.repo.ListActive()
+}
+
 func (u *Usecase) List() ([]entity.SocialLink, error) {
 	return u.repo.List()
 }

@@ -18,6 +18,7 @@ type socialLinkRequest struct {
 	Label     string `json:"label"`
 	URL       string `json:"url"`
 	IconPath  string `json:"icon_path"`
+	IsActive  bool   `json:"is_active"`
 	SortOrder int    `json:"sort_order"`
 }
 
@@ -30,7 +31,7 @@ func (h *Handler) initSocialLinkUsecase() {
 
 func (h *Handler) ListPublicSocialLinks(c *fiber.Ctx) error {
 	h.initSocialLinkUsecase()
-	socialLinks, err := h.socialLinkUsecase.List()
+	socialLinks, err := h.socialLinkUsecase.ListActive()
 	if err != nil {
 		return response.JSON(c, http.StatusInternalServerError, "failed to fetch social links", nil)
 	}
@@ -38,7 +39,12 @@ func (h *Handler) ListPublicSocialLinks(c *fiber.Ctx) error {
 }
 
 func (h *Handler) ListAdminSocialLinks(c *fiber.Ctx) error {
-	return h.ListPublicSocialLinks(c)
+	h.initSocialLinkUsecase()
+	socialLinks, err := h.socialLinkUsecase.List()
+	if err != nil {
+		return response.JSON(c, http.StatusInternalServerError, "failed to fetch social links", nil)
+	}
+	return response.JSON(c, http.StatusOK, "ok", socialLinks)
 }
 
 func (h *Handler) GetAdminSocialLink(c *fiber.Ctx) error {
@@ -138,6 +144,7 @@ func (h *Handler) parseSocialLinkRequest(c *fiber.Ctx) (*entity.SocialLink, erro
 		Label:     payload.Label,
 		URL:       payload.URL,
 		IconPath:  payload.IconPath,
+		IsActive:  payload.IsActive,
 		SortOrder: payload.SortOrder,
 	}, nil
 }

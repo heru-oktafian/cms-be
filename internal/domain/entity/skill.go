@@ -3,7 +3,9 @@ package entity
 type Skill struct {
 	BaseModel
 	Name      string `json:"name"`
-	Level     string `json:"level"`
+	Category  string `json:"category"`
+	Level     int    `json:"level"`
 	IconPath  string `json:"icon_path"`
+	IsActive  bool   `json:"is_active"`
 	SortOrder int    `json:"sort_order"`
 }

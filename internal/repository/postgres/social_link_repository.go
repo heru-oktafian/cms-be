@@ -15,6 +15,14 @@ func NewSocialLinkRepository(db *gorm.DB) *SocialLinkRepository {
 	return &SocialLinkRepository{db: db}
 }
 
+func (r *SocialLinkRepository) ListActive() ([]entity.SocialLink, error) {
+	var socialLinks []entity.SocialLink
+	if err := r.db.Where("is_active = ?", true).Order("sort_order ASC, id DESC").Find(&socialLinks).Error; err != nil {
+		return nil, err
+	}
+	return socialLinks, nil
+}
+
 func (r *SocialLinkRepository) List() ([]entity.SocialLink, error) {
 	var socialLinks []entity.SocialLink
 	if err := r.db.Order("sort_order ASC, id DESC").Find(&socialLinks).Error; err != nil {

@@ -15,6 +15,14 @@ func NewExperienceRepository(db *gorm.DB) *ExperienceRepository {
 	return &ExperienceRepository{db: db}
 }
 
+func (r *ExperienceRepository) ListActive() ([]entity.Experience, error) {
+	var experiences []entity.Experience
+	if err := r.db.Where("is_active = ?", true).Order("sort_order ASC, id DESC").Find(&experiences).Error; err != nil {
+		return nil, err
+	}
+	return experiences, nil
+}
+
 func (r *ExperienceRepository) List() ([]entity.Experience, error) {
 	var experiences []entity.Experience
 	if err := r.db.Order("sort_order ASC, id DESC").Find(&experiences).Error; err != nil {

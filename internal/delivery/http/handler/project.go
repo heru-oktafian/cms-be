@@ -19,9 +19,11 @@ type projectRequest struct {
 	Summary       string `json:"summary"`
 	Description   string `json:"description"`
 	ThumbnailPath string `json:"thumbnail_path"`
+	StackItems    string `json:"stack_items"`
 	ProjectURL    string `json:"project_url"`
 	RepoURL       string `json:"repo_url"`
 	IsFeatured    bool   `json:"is_featured"`
+	IsActive      bool   `json:"is_active"`
 	SortOrder     int    `json:"sort_order"`
 }
 
@@ -34,7 +36,7 @@ func (h *Handler) initProjectUsecase() {
 
 func (h *Handler) ListPublicProjects(c *fiber.Ctx) error {
 	h.initProjectUsecase()
-	projects, err := h.projectUsecase.List()
+	projects, err := h.projectUsecase.ListActive()
 	if err != nil {
 		return response.JSON(c, http.StatusInternalServerError, "failed to fetch projects", nil)
 	}
@@ -42,7 +44,12 @@ func (h *Handler) ListPublicProjects(c *fiber.Ctx) error {
 }
 
 func (h *Handler) ListAdminProjects(c *fiber.Ctx) error {
-	return h.ListPublicProjects(c)
+	h.initProjectUsecase()
+	projects, err := h.projectUsecase.List()
+	if err != nil {
+		return response.JSON(c, http.StatusInternalServerError, "failed to fetch projects", nil)
+	}
+	return response.JSON(c, http.StatusOK, "ok", projects)
 }
 
 func (h *Handler) GetAdminProject(c *fiber.Ctx) error {
@@ -130,6 +137,7 @@ func (h *Handler) parseProjectRequest(c *fiber.Ctx) (*entity.Project, error) {
 	payload.Summary = strings.TrimSpace(payload.Summary)
 	payload.Description = strings.TrimSpace(payload.Description)
 	payload.ThumbnailPath = strings.TrimSpace(payload.ThumbnailPath)
+	payload.StackItems = strings.TrimSpace(payload.StackItems)
 	payload.ProjectURL = strings.TrimSpace(payload.ProjectURL)
 	payload.RepoURL = strings.TrimSpace(payload.RepoURL)
 
@@ -146,9 +154,11 @@ func (h *Handler) parseProjectRequest(c *fiber.Ctx) (*entity.Project, error) {
 		Summary:       payload.Summary,
 		Description:   payload.Description,
 		ThumbnailPath: payload.ThumbnailPath,
+		StackItems:    payload.StackItems,
 		ProjectURL:    payload.ProjectURL,
 		RepoURL:       payload.RepoURL,
 		IsFeatured:    payload.IsFeatured,
+		IsActive:      payload.IsActive,
 		SortOrder:     payload.SortOrder,
 	}, nil
 }

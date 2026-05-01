@@ -13,6 +13,10 @@ func NewUsecase(repo repository.ExperienceRepository) *Usecase {
 	return &Usecase{repo: repo}
 }
 
+func (u *Usecase) ListActive() ([]entity.Experience, error) {
+	return u.repo.ListActive()
+}
+
 func (u *Usecase) List() ([]entity.Experience, error) {
 	return u.repo.List()
 }

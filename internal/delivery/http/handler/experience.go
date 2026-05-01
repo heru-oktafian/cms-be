@@ -20,6 +20,7 @@ type experienceRequest struct {
 	StartDate   string `json:"start_date"`
 	EndDate     string `json:"end_date"`
 	IsCurrent   bool   `json:"is_current"`
+	IsActive    bool   `json:"is_active"`
 	SortOrder   int    `json:"sort_order"`
 }
 
@@ -32,7 +33,7 @@ func (h *Handler) initExperienceUsecase() {
 
 func (h *Handler) ListPublicExperiences(c *fiber.Ctx) error {
 	h.initExperienceUsecase()
-	experiences, err := h.experienceUsecase.List()
+	experiences, err := h.experienceUsecase.ListActive()
 	if err != nil {
 		return response.JSON(c, http.StatusInternalServerError, "failed to fetch experiences", nil)
 	}
@@ -40,7 +41,12 @@ func (h *Handler) ListPublicExperiences(c *fiber.Ctx) error {
 }
 
 func (h *Handler) ListAdminExperiences(c *fiber.Ctx) error {
-	return h.ListPublicExperiences(c)
+	h.initExperienceUsecase()
+	experiences, err := h.experienceUsecase.List()
+	if err != nil {
+		return response.JSON(c, http.StatusInternalServerError, "failed to fetch experiences", nil)
+	}
+	return response.JSON(c, http.StatusOK, "ok", experiences)
 }
 
 func (h *Handler) GetAdminExperience(c *fiber.Ctx) error {
@@ -143,6 +149,7 @@ func (h *Handler) parseExperienceRequest(c *fiber.Ctx) (*entity.Experience, erro
 		StartDate:   payload.StartDate,
 		EndDate:     payload.EndDate,
 		IsCurrent:   payload.IsCurrent,
+		IsActive:    payload.IsActive,
 		SortOrder:   payload.SortOrder,
 	}, nil
 }

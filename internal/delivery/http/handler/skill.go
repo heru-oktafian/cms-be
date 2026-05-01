@@ -15,8 +15,10 @@ import (
 
 type skillRequest struct {
 	Name      string `json:"name"`
-	Level     string `json:"level"`
+	Category  string `json:"category"`
+	Level     int    `json:"level"`
 	IconPath  string `json:"icon_path"`
+	IsActive  bool   `json:"is_active"`
 	SortOrder int    `json:"sort_order"`
 }
 
@@ -29,7 +31,7 @@ func (h *Handler) initSkillUsecase() {
 
 func (h *Handler) ListPublicSkills(c *fiber.Ctx) error {
 	h.initSkillUsecase()
-	skills, err := h.skillUsecase.List()
+	skills, err := h.skillUsecase.ListActive()
 	if err != nil {
 		return response.JSON(c, http.StatusInternalServerError, "failed to fetch skills", nil)
 	}
@@ -37,7 +39,12 @@ func (h *Handler) ListPublicSkills(c *fiber.Ctx) error {
 }
 
 func (h *Handler) ListAdminSkills(c *fiber.Ctx) error {
-	return h.ListPublicSkills(c)
+	h.initSkillUsecase()
+	skills, err := h.skillUsecase.List()
+	if err != nil {
+		return response.JSON(c, http.StatusInternalServerError, "failed to fetch skills", nil)
+	}
+	return response.JSON(c, http.StatusOK, "ok", skills)
 }
 
 func (h *Handler) GetAdminSkill(c *fiber.Ctx) error {
@@ -121,7 +128,7 @@ func (h *Handler) parseSkillRequest(c *fiber.Ctx) (*entity.Skill, error) {
 	}
 
 	payload.Name = strings.TrimSpace(payload.Name)
-	payload.Level = strings.TrimSpace(payload.Level)
+	payload.Category = strings.TrimSpace(payload.Category)
 	payload.IconPath = strings.TrimSpace(payload.IconPath)
 
 	if payload.Name == "" {
@@ -130,8 +137,10 @@ func (h *Handler) parseSkillRequest(c *fiber.Ctx) (*entity.Skill, error) {
 
 	return &entity.Skill{
 		Name:      payload.Name,
+		Category:  payload.Category,
 		Level:     payload.Level,
 		IconPath:  payload.IconPath,
+		IsActive:  payload.IsActive,
 		SortOrder: payload.SortOrder,
 	}, nil
 }
