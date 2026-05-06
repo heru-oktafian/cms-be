@@ -27,6 +27,7 @@ func NewApp(container *app.App) *fiber.App {
 	public.Get("/experiences", h.ListPublicExperiences)
 	public.Get("/social-links", h.ListPublicSocialLinks)
 	public.Get("/tools", h.GetPublicTools)
+	public.Post("/contact-messages", h.CreatePublicContactMessage)
 
 	adminAuth := api.Group("/admin/auth")
 	adminAuth.Post("/login", h.LoginAdmin)
@@ -60,6 +61,9 @@ func NewApp(container *app.App) *fiber.App {
 	admin.Post("/tools", h.CreateAdminTool)
 	admin.Put("/tools/:id", h.UpdateAdminTool)
 	admin.Delete("/tools/:id", h.DeleteAdminTool)
+	admin.Get("/contact-messages", h.ListAdminContactMessages)
+	admin.Get("/contact-messages/:id", h.GetAdminContactMessage)
+	admin.Put("/contact-messages/:id", h.UpdateAdminContactMessage)
 
 	return app
 }

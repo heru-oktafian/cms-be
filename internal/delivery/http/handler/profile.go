@@ -9,6 +9,7 @@ import (
 	"github.com/heru-oktafian/cms-be/internal/domain/entity"
 	profileRepo "github.com/heru-oktafian/cms-be/internal/repository/postgres"
 	authUsecase "github.com/heru-oktafian/cms-be/internal/usecase/auth"
+	contactMessageUsecase "github.com/heru-oktafian/cms-be/internal/usecase/contact_message"
 	experienceUsecase "github.com/heru-oktafian/cms-be/internal/usecase/experience"
 	profileUsecase "github.com/heru-oktafian/cms-be/internal/usecase/profile"
 	projectUsecase "github.com/heru-oktafian/cms-be/internal/usecase/project"
@@ -22,11 +23,12 @@ type Handler struct {
 	app               *appctx.App
 	authUsecase       *authUsecase.Usecase
 	profileUsecase    *profileUsecase.Usecase
-	projectUsecase    *projectUsecase.Usecase
-	skillUsecase      *skillUsecase.Usecase
-	experienceUsecase *experienceUsecase.Usecase
-	socialLinkUsecase *socialLinkUsecase.Usecase
-	toolUsecase       *toolUsecase.UseCase
+	projectUsecase        *projectUsecase.Usecase
+	skillUsecase          *skillUsecase.Usecase
+	experienceUsecase     *experienceUsecase.Usecase
+	socialLinkUsecase     *socialLinkUsecase.Usecase
+	toolUsecase           *toolUsecase.UseCase
+	contactMessageUsecase *contactMessageUsecase.Usecase
 }
 
 type upsertProfileRequest struct {
@@ -46,11 +48,13 @@ func NewHandler(app *appctx.App) *Handler {
 	profileRepository := profileRepo.NewProfileRepository(app.DB)
 	adminUserRepository := profileRepo.NewAdminUserRepository(app.DB)
 	toolRepository := profileRepo.NewToolRepository(app.DB)
+	contactMessageRepository := profileRepo.NewContactMessageRepository(app.DB)
 	return &Handler{
-		app:            app,
-		authUsecase:    authUsecase.NewUsecase(adminUserRepository, app.Config),
-		profileUsecase: profileUsecase.NewUsecase(profileRepository),
-		toolUsecase:    toolUsecase.NewUseCase(toolRepository),
+		app:                   app,
+		authUsecase:           authUsecase.NewUsecase(adminUserRepository, app.Config),
+		profileUsecase:        profileUsecase.NewUsecase(profileRepository),
+		toolUsecase:           toolUsecase.NewUseCase(toolRepository),
+		contactMessageUsecase: contactMessageUsecase.NewUsecase(contactMessageRepository),
 	}
 }
 

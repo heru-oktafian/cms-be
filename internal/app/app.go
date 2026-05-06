@@ -29,6 +29,7 @@ func Bootstrap() *App {
 		&entity.Experience{},
 		&entity.SocialLink{},
 		&entity.Tool{},
+		&entity.ContactMessage{},
 		&entity.AdminUser{},
 	); err != nil {
 		log.Fatalf("failed to migrate database: %v", err)

@@ -17,7 +17,6 @@ type skillRequest struct {
 	Name      string `json:"name"`
 	Category  string `json:"category"`
 	Level     int    `json:"level"`
-	IconPath  string `json:"icon_path"`
 	IsActive  bool   `json:"is_active"`
 	SortOrder int    `json:"sort_order"`
 }
@@ -129,7 +128,6 @@ func (h *Handler) parseSkillRequest(c *fiber.Ctx) (*entity.Skill, error) {
 
 	payload.Name = strings.TrimSpace(payload.Name)
 	payload.Category = strings.TrimSpace(payload.Category)
-	payload.IconPath = strings.TrimSpace(payload.IconPath)
 
 	if payload.Name == "" {
 		return nil, fiber.NewError(http.StatusBadRequest, "name is required")
@@ -139,7 +137,6 @@ func (h *Handler) parseSkillRequest(c *fiber.Ctx) (*entity.Skill, error) {
 		Name:      payload.Name,
 		Category:  payload.Category,
 		Level:     payload.Level,
-		IconPath:  payload.IconPath,
 		IsActive:  payload.IsActive,
 		SortOrder: payload.SortOrder,
 	}, nil
