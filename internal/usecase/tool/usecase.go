@@ -25,14 +25,14 @@ func (u *UseCase) GetAll() ([]entity.Tool, error) {
 
 func (u *UseCase) Create(input *entity.Tool) error {
 	input.Name = strings.TrimSpace(input.Name)
-	input.IconPath = strings.TrimSpace(input.IconPath)
+	input.IconText = strings.TrimSpace(input.IconText)
 	input.URL = strings.TrimSpace(input.URL)
 	return u.repo.Create(input)
 }
 
 func (u *UseCase) Update(input *entity.Tool) error {
 	input.Name = strings.TrimSpace(input.Name)
-	input.IconPath = strings.TrimSpace(input.IconPath)
+	input.IconText = strings.TrimSpace(input.IconText)
 	input.URL = strings.TrimSpace(input.URL)
 	return u.repo.Update(input)
 }

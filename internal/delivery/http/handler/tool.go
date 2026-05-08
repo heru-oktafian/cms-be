@@ -16,7 +16,7 @@ type ToolHandler struct {
 
 type toolRequest struct {
 	Name      string `json:"name"`
-	IconPath  string `json:"icon_path"`
+	IconText  string `json:"icon_text"`
 	URL       string `json:"url"`
 	SortOrder int    `json:"sort_order"`
 	IsActive  bool   `json:"is_active"`
@@ -51,7 +51,7 @@ func (h *ToolHandler) Create(c *fiber.Ctx) error {
 	if req.Name == "" {
 		return response.JSON(c, fiber.StatusBadRequest, "name is required", nil)
 	}
-	tool := &entity.Tool{Name: req.Name, IconPath: strings.TrimSpace(req.IconPath), URL: strings.TrimSpace(req.URL), SortOrder: req.SortOrder, IsActive: req.IsActive}
+	tool := &entity.Tool{Name: req.Name, IconText: strings.TrimSpace(req.IconText), URL: strings.TrimSpace(req.URL), SortOrder: req.SortOrder, IsActive: req.IsActive}
 	if err := h.useCase.Create(tool); err != nil {
 		return response.JSON(c, fiber.StatusInternalServerError, "failed to create tool", nil)
 	}
@@ -67,7 +67,7 @@ func (h *ToolHandler) Update(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		return response.JSON(c, fiber.StatusBadRequest, "invalid request body", nil)
 	}
-	tool := &entity.Tool{BaseModel: entity.BaseModel{ID: uint(id)}, Name: strings.TrimSpace(req.Name), IconPath: strings.TrimSpace(req.IconPath), URL: strings.TrimSpace(req.URL), SortOrder: req.SortOrder, IsActive: req.IsActive}
+	tool := &entity.Tool{BaseModel: entity.BaseModel{ID: uint(id)}, Name: strings.TrimSpace(req.Name), IconText: strings.TrimSpace(req.IconText), URL: strings.TrimSpace(req.URL), SortOrder: req.SortOrder, IsActive: req.IsActive}
 	if err := h.useCase.Update(tool); err != nil {
 		return response.JSON(c, fiber.StatusInternalServerError, "failed to update tool", nil)
 	}
