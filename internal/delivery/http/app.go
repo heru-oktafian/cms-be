@@ -21,6 +21,7 @@ func NewApp(container *app.App) *fiber.App {
 	api.Get("/health", h.Health)
 
 	public := api.Group("/public")
+	public.Get("/portfolio", h.GetPublicPortfolio)
 	public.Get("/profile", h.GetPublicProfile)
 	public.Get("/projects", h.ListPublicProjects)
 	public.Get("/skills", h.ListPublicSkills)
