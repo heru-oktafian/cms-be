@@ -36,3 +36,7 @@ func (u *Usecase) Update(skill *entity.Skill) (*entity.Skill, error) {
 func (u *Usecase) Delete(id uint) error {
 	return u.repo.Delete(id)
 }
+
+func (u *Usecase) Count() (int, error) {
+	return u.repo.Count()
+}

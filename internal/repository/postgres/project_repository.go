@@ -59,3 +59,11 @@ func (r *ProjectRepository) Update(project *entity.Project) (*entity.Project, er
 func (r *ProjectRepository) Delete(id uint) error {
 	return r.db.Delete(&entity.Project{}, id).Error
 }
+
+func (r *ProjectRepository) Count() (int, error) {
+	var count int64
+	if err := r.db.Model(&entity.Project{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}

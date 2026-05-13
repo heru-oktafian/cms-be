@@ -7,4 +7,5 @@ type ContactMessageRepository interface {
 	GetByID(id uint) (*entity.ContactMessage, error)
 	Create(message *entity.ContactMessage) (*entity.ContactMessage, error)
 	Update(message *entity.ContactMessage) (*entity.ContactMessage, error)
+	Count() (int, error)
 }

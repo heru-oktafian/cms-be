@@ -9,4 +9,5 @@ type ProjectRepository interface {
 	Create(project *entity.Project) (*entity.Project, error)
 	Update(project *entity.Project) (*entity.Project, error)
 	Delete(id uint) error
+	Count() (int, error)
 }

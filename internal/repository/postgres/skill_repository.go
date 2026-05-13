@@ -59,3 +59,11 @@ func (r *SkillRepository) Update(skill *entity.Skill) (*entity.Skill, error) {
 func (r *SkillRepository) Delete(id uint) error {
 	return r.db.Delete(&entity.Skill{}, id).Error
 }
+
+func (r *SkillRepository) Count() (int, error) {
+	var count int64
+	if err := r.db.Model(&entity.Skill{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}

@@ -47,3 +47,11 @@ func (r *ContactMessageRepository) Update(message *entity.ContactMessage) (*enti
 	}
 	return message, nil
 }
+
+func (r *ContactMessageRepository) Count() (int, error) {
+	var count int64
+	if err := r.db.Model(&entity.ContactMessage{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}

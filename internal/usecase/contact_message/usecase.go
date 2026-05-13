@@ -68,3 +68,7 @@ func IsValidStatus(status string) bool {
 		return false
 	}
 }
+
+func (u *Usecase) Count() (int, error) {
+	return u.repo.Count()
+}

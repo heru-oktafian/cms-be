@@ -65,6 +65,7 @@ func NewApp(container *app.App) *fiber.App {
 	admin.Get("/contact-messages", h.ListAdminContactMessages)
 	admin.Get("/contact-messages/:id", h.GetAdminContactMessage)
 	admin.Put("/contact-messages/:id", h.UpdateAdminContactMessage)
+	admin.Get("/counts", h.GetCounts)
 
 	return app
 }

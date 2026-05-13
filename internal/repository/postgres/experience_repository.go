@@ -59,3 +59,11 @@ func (r *ExperienceRepository) Update(experience *entity.Experience) (*entity.Ex
 func (r *ExperienceRepository) Delete(id uint) error {
 	return r.db.Delete(&entity.Experience{}, id).Error
 }
+
+func (r *ExperienceRepository) Count() (int, error) {
+	var count int64
+	if err := r.db.Model(&entity.Experience{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}

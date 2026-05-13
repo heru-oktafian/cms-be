@@ -36,3 +36,7 @@ func (u *Usecase) Update(experience *entity.Experience) (*entity.Experience, err
 func (u *Usecase) Delete(id uint) error {
 	return u.repo.Delete(id)
 }
+
+func (u *Usecase) Count() (int, error) {
+	return u.repo.Count()
+}

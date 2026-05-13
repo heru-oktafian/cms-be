@@ -9,4 +9,5 @@ type SkillRepository interface {
 	Create(skill *entity.Skill) (*entity.Skill, error)
 	Update(skill *entity.Skill) (*entity.Skill, error)
 	Delete(id uint) error
+	Count() (int, error)
 }

@@ -9,4 +9,5 @@ type ExperienceRepository interface {
 	Create(experience *entity.Experience) (*entity.Experience, error)
 	Update(experience *entity.Experience) (*entity.Experience, error)
 	Delete(id uint) error
+	Count() (int, error)
 }
